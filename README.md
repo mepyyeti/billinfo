@@ -1,8 +1,6 @@
 # Billinfo
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/billinfo`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A simple bill payment repository.  Use the gem as a log of bills paid.
 
 ## Installation
 
@@ -20,10 +18,6 @@ Or install it yourself as:
 
     $ gem install billinfo
 
-## Usage
-
-TODO: Write usage instructions here
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -40,4 +34,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Billinfo project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/billinfo/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Billinfo project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/mepyyeti/billinfo/blob/master/CODE_OF_CONDUCT.md).
