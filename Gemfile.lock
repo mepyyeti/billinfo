@@ -16,8 +16,8 @@ PLATFORMS
 DEPENDENCIES
   billinfo!
   bundler (~> 2.0)
-  rake (~> 10.5.0)
-  sqlite3 (>= 1.4.0)
+  rake (~> 10.5.0, >= 10.5.0)
+  sqlite3 (~> 1.4.0, >= 1.4.0)
 
 RUBY VERSION
    ruby 2.3.7p456

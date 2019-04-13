@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = 'http://rubygems.org'
+    spec.metadata["allowed_push_host"] = 'https://rubygems.org'
 
     spec.metadata["homepage_uri"] = spec.homepage
     spec.metadata["source_code_uri"] = spec.homepage
@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "~> 10.5.0"
+  spec.add_development_dependency "rake", "~> 10.5.0", ">= 10.5.0"
   spec.add_runtime_dependency "sqlite3", "~> 1.4.0", ">= 1.4.0"
   spec.post_install_message = "thx.  https://www.github.com/mepyyeti/billinfo"
 end
