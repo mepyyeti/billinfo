@@ -3,6 +3,56 @@
 
 require 'sqlite3'
 
+def create_categories(new_category = nil)
+	unless File.file?('billinfo.db')
+		categories = ['electricity','water','cable','streaming','rent','food','clothes','out \'n about']
+		begin
+			db = SQLite3::Database.open('billinfo.db')
+			db.transaction
+			db.execute2 "CREATE table if not exists categories(Type TEXT PRIMARY KEY)"
+			categories.each { |cat| db.execute2 "INSERT into categories(Type) values(:Type)", cat }
+			db.commit
+		rescue SQLite3::Exception => e
+			puts e
+			db.rollback
+		ensure
+			db.close if db
+		end
+	end
+	if new_category != nil
+		begin 
+			db = SQLite3::Database.open('billinfo.db')
+			db.transaction
+			db.execute2 "INSERT into categories(Type) values(:new_category)", new_category
+			db.commit
+			puts db.changes.to_s + " change made"
+		rescue SQLite3::Exception => e
+			puts e
+			db.rollback
+		ensure
+			db.close if db
+		end
+	end
+end
+
+def print_standard_categories
+	begin
+		db = SQLite3::Database.open('billinfo.db')
+		db.results_as_hash = true
+		categories_to_print = []
+		categories = db.prepare "SELECT Type FROM categories"
+		categories.execute
+		categories.each { |cat| categories_to_print << cat[0] }
+		@categories_to_print = categories_to_print
+	rescue SQLite3::Exception => e
+		puts e
+	ensure
+		categories.close if categories
+		db.close if db
+	end
+	@categories_to_print
+end
+
 def billdb(info_hash)
 	begin
 		db = SQLite3::Database.open('billinfo.db')

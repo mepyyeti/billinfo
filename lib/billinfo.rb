@@ -9,6 +9,7 @@ module Billinfo
 
 	go = true
 	while go
+		create_categories
 		time = Time.new
 		year = time.year
 		puts "[1] to make a new entry\n[2] to display entries by category\n[3] to exit"
@@ -20,30 +21,38 @@ module Billinfo
 			print "choose 1 or 2: "
 			choice = gets.chomp.to_i
 		end
-		categories = ['electricity','water','cable','streaming','rent','food','clothes','out \'n about']
-	
+		categories = print_standard_categories
+
 		if choice == 1
-			puts "enter a category such as: #{categories}: "
-			print "category: "
+			print "enter a category such as: " , categories
+			print "\ncategory: "
 			category = gets.chomp.to_s
-			new_cat = category
-			category = [category]
-			
+
+			if category.empty?
+				print "you must enter a category\n"
+				next
+			else
+				category = [category]
+			end
+
 			while (category & categories).empty?
 				puts "your category is not listed."
 				print "\nwould you like to add #{category} as a category? [y/n]: "
 				choice = gets.chomp.downcase
-				if choice == 'y' or choice 'yes'
-					categories << new_cat
+				if choice == 'y' or choice =='yes'
+					create_categories(category)
+					categories = print_standard_categories
+				else
+					next
 				end
 			end
-			
+
 			puts
 			print "enter Month: "
 			month = gets.chomp.to_s.capitalize
 			month = [month]
 			months = ['January','February','March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-			
+
 			while (month & months).empty?
 				puts "You must enter a month."
 				print "\nAcceptable months are: " , months
@@ -68,6 +77,11 @@ module Billinfo
 			billavgx(info_hash)
 	
 		elsif choice == 2
+			if !File.file?('billinfo.db')
+				puts "You have not made any entries yet - there is nothing to show."
+				next
+			end
+		
 			print categories
 			puts "\nenter a category from choices above"
 			print "category: "
@@ -81,8 +95,9 @@ module Billinfo
 			
 			print "enter year to search (form: XXXX): "
 			year_foo = [gets.chomp]
+			p year_foo
 			yrs = uniq_yrs
-			
+			p yrs
 			while year_foo.is_a?(String) || year_foo.empty? || (year_foo & yrs).empty?
 				puts "year must be one of the following:"
 				print yrs

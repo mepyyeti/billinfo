@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Billinfo::VERSION
   spec.authors       = ["mepyyeti"]
   spec.email         = ["rcabej@gmail.com"]
-
-  spec.summary       = %q{A bill repository. Organizes monthly bills by category. Calculates inclusive/exclusive means. Sums categories.}
+  spec.description   = %q{A bill repository. Organizes monthly bills by category. Calculates inclusive/exclusive means. Sums categories. Added functionality that permanently adds custom categories}
+  spec.summary       = %q{A bill repository. Organizes monthly bills by category. Calculates inclusive/exclusive means. Sums categories. Added functionality that permanently adds custom categories}
   spec.homepage      = "https://www.github.com/mepyyeti/billinfo"
   spec.files	     = 'git ls-files'.split($/)
   spec.require_paths = ["lib"]
