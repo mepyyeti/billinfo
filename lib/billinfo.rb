@@ -9,7 +9,6 @@ module Billinfo
 
 	go = true
 	while go
-		create_categories
 		time = Time.new
 		year = time.year
 		puts "[1] to make a new entry\n[2] to display entries by category\n[3] to exit"
@@ -21,9 +20,10 @@ module Billinfo
 			print "choose 1 or 2: "
 			choice = gets.chomp.to_i
 		end
-		categories = print_standard_categories
 
 		if choice == 1
+			create_categories
+			categories = print_standard_categories
 			print "enter a category such as: " , categories
 			print "\ncategory: "
 			category = gets.chomp.to_s
@@ -81,7 +81,9 @@ module Billinfo
 				puts "You have not made any entries yet - there is nothing to show."
 				next
 			end
-		
+
+			categories = print_standard_categories
+
 			print categories
 			puts "\nenter a category from choices above"
 			print "category: "
@@ -94,33 +96,21 @@ module Billinfo
 			end
 			
 			print "enter year to search (form: XXXX): "
-			year_foo = [gets.chomp]
-			p year_foo
+			year_foo = [gets.chomp.to_i]
 			yrs = uniq_yrs
-			p yrs
+			
 			while year_foo.is_a?(String) || year_foo.empty? || (year_foo & yrs).empty?
 				puts "year must be one of the following:"
-				print yrs
-				puts
 				print "enter year to search (form: XXXX): "
-				year_foo = gets.chomp
+				year_foo = [gets.chomp.to_i]
 			end
-			
-			year = Integer(year_foo.pop)
-			
-			while year.is_a?(Integer)==false
-				puts "You must enter a numeric year (such as 2019)."
-				puts "Please retry."
-				year = [gets.chomp]
-			end
-			year = [year]
-				
+
+			year = [year_foo]
 			info_hash = {category: category, year: year}
 			printinfo(info_hash)
 
 		elsif choice == 3
 			go = false
-
 		else
 			next
 		end
@@ -136,5 +126,4 @@ module Billinfo
 		end
 	
 	end
-
 end

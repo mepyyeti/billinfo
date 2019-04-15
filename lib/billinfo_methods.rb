@@ -25,7 +25,7 @@ def create_categories(new_category = nil)
 			db.transaction
 			db.execute2 "INSERT into categories(Type) values(:new_category)", new_category
 			db.commit
-			puts db.changes.to_s + " change made"
+			puts db.changes.to_s + " new category added"
 		rescue SQLite3::Exception => e
 			puts e
 			db.rollback
@@ -56,12 +56,11 @@ end
 def billdb(info_hash)
 	begin
 		db = SQLite3::Database.open('billinfo.db')
-		puts db.get_first_value "select SQLite_version()"
 		db.transaction
 		db.execute2 "CREATE table if not exists bills(Id INTEGER PRIMARY KEY, Type TEXT, Month TEXT, Year INTEGER, Amount FLOAT, AvgInc FLOAT, AvgX FLOAT, Total FLOAT)"
 		db.execute2 "INSERT into bills(Type, Month, Year, Amount) values(:Type, :Month, :Year, :Amount)", info_hash[:category], info_hash[:month], info_hash[:year], info_hash[:amt]
 		db.commit
-		puts db.changes.to_s + " change made"
+		puts db.changes.to_s + " entry made"
 	rescue SQLite3::Exception => e
 		puts e
 		db.rollback
@@ -75,10 +74,14 @@ def billtotal(info_hash)
 		db = SQLite3::Database.open('billinfo.db')
 		db.transaction
 		get_amt =  db.execute2 "SELECT sum(Amount) from bills WHERE Type = :Type AND Year = :Year", info_hash[:category], info_hash[:year]
-		puts "foo"
 		db.execute2 "UPDATE bills SET Total = :Total WHERE Type = :Type AND Year = :Year", get_amt[1][0], info_hash[:category], info_hash[:year]
 		@total_amt=get_amt[1][0]
-		puts db.changes.to_s + " changes made"
+				if db.changes == 1
+			alter = "change"
+		else
+			alter = "changes"
+		end
+		puts db.changes.to_s + " #{alter} made to " + info_hash[:category].to_s + " for " + info_hash[:year].to_s
 		db.commit
 	rescue SQLite3::Exception => e
 		puts "error here " , e
@@ -109,7 +112,12 @@ def billavginc(info_hash)
 		update_avginc.each do |line|
 			db.execute2 "UPDATE bills SET AvgInc = :AvgInc WHERE Type = :Type AND Year = :Year", @avginc, info_hash[:category], info_hash[:year]
 			end
-		puts db.changes.to_s + " changes made " + "for #{info_hash[:year].to_s}"
+		if db.changes == 1
+			alter = "change"
+		else
+			alter = "changes"
+		end
+		puts db.changes.to_s + " #{alter} made " + "for #{info_hash[:year].to_s}"
 		db.commit
 	rescue SQLite3::Exception => e
 		puts "error here " , e
@@ -136,7 +144,6 @@ def billavgx(info_hash)
 			end	
 			db.execute2 "UPDATE bills SET AvgX = :AvgX WHERE Amount = :Amount AND Type = :Type AND Year = :Year", avgx, specific_row[0], info_hash[:category], info_hash[:year]
 		end
-		puts db.changes.to_s + " changes made " + "to #{info_hash[:year].to_s}"
 		db.commit
 	rescue SQLite3::Exception => e
 		puts "error here " , e
@@ -152,7 +159,7 @@ def uniq_yrs
 		yrs = []
 		db_print = db.execute2 "SELECT Year FROM bills"
 		db_print.each do |yr|
-			yrs << yr
+			yrs << yr[0]
 		end
 		yrs.shift
 		@yrs = yrs.uniq
@@ -161,6 +168,7 @@ def uniq_yrs
 	ensure
 		db.close if db
 	end
+	p @yrs.class
 	@yrs
 end
 
